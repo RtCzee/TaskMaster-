@@ -1,4 +1,3 @@
-import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { LayoutDashboard, Calendar as CalendarIcon, Settings as SettingsIcon } from 'lucide-react';
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Plus, Calendar as CalendarIcon } from 'lucide-react';
 import { useTaskStore } from '../store/taskStore';
 import TaskForm from './TaskForm';
@@ -31,8 +31,7 @@ const Dashboard = () => {
         {tasks.map((task) => (
           <div
             key={task.id}
-            className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md"
-            style={{ borderLeft: `4px solid ${task.color || '#6366f1'}` }}
+            className={`bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md border-left-${task.color ? task.color : 'default-color'}`}
           >
             <div className="flex justify-between items-start mb-2">
               <h3 className="font-semibold">{task.title}</h3>

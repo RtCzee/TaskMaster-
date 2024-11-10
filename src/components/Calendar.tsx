@@ -20,7 +20,7 @@ import {
   getMonth,
   getYear,
 } from 'date-fns';
-import { ChevronLeft, ChevronRight, Plus, Calendar as CalendarIcon } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
 import { useTaskStore } from '../store/taskStore';
 import TaskForm from './TaskForm';
 
@@ -77,11 +77,13 @@ const Calendar = () => {
                   <div className="text-xl font-semibold">{format(day, 'd')}</div>
                 </div>
                 <button
+                  type="button"
                   onClick={() => {
                     setSelectedDate(day);
                     setIsFormOpen(true);
                   }}
                   className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full"
+                  aria-label="Add Task"
                 >
                   <Plus size={20} />
                 </button>
@@ -91,11 +93,7 @@ const Calendar = () => {
                 {dayTasks.map((task) => (
                   <div
                     key={task.id}
-                    className="text-sm p-2 rounded"
-                    style={{
-                      backgroundColor: task.color + '33',
-                      borderLeft: `3px solid ${task.color}`,
-                    }}
+                    className="text-xs p-1 rounded truncate task-item"
                   >
                     <div className="font-medium">{task.title}</div>
                     <div className="text-xs text-gray-600 dark:text-gray-300">
@@ -147,6 +145,7 @@ const Calendar = () => {
                   {format(day, 'd')}
                 </span>
                 <button
+                  title="Add Task for this date"
                   onClick={() => {
                     setSelectedDate(day);
                     setIsFormOpen(true);
@@ -160,12 +159,7 @@ const Calendar = () => {
                 {dayTasks.map((task) => (
                   <div
                     key={task.id}
-                    className="text-xs p-1 rounded truncate"
-                    style={{
-                      backgroundColor: task.color + '33',
-                      borderLeft: `2px solid ${task.color}`,
-                    }}
-                    title={task.title}
+                    className="text-xs p-1 rounded truncate task-item"
                   >
                     {task.title}
                   </div>
@@ -237,7 +231,9 @@ const Calendar = () => {
           </div>
           <div className="flex items-center space-x-2">
             <button
+              type="button"
               onClick={() => navigate('prev')}
+              aria-label="Previous Month"
               className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full"
             >
               <ChevronLeft size={20} />
@@ -249,6 +245,7 @@ const Calendar = () => {
               )}
             </span>
             <button
+              title="Next"
               onClick={() => navigate('next')}
               className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full"
             >

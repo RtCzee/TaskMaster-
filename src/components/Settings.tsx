@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTaskStore } from '../store/taskStore';
 
 const Settings = () => {
@@ -15,7 +14,9 @@ const Settings = () => {
             <label className="block text-sm font-medium">Name</label>
             <input
               type="text"
-              value={settings.name}
+              value={settings.name || ''}
+              title="Enter your name"
+              placeholder="Your Name"
               onChange={(e) => updateSettings({ name: e.target.value })}
               className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"
             />
@@ -37,10 +38,9 @@ const Settings = () => {
           <div className="space-y-2">
             <label className="block text-sm font-medium">Theme</label>
             <select
-              value={settings.theme}
-              onChange={(e) =>
-                updateSettings({ theme: e.target.value as 'light' | 'dark' })
-              }
+              value={settings.theme || 'light'}
+              onChange={(e) => updateSettings({ theme: e.target.value as 'light' | 'dark' })}
+              title="Select your theme"
               className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"
             >
               <option value="light">Light</option>
@@ -54,11 +54,12 @@ const Settings = () => {
           <div className="space-y-2">
             <label className="block text-sm font-medium">Timezone</label>
             <select
-              value={settings.timezone}
+              value={settings.timezone || ''}
               onChange={(e) => updateSettings({ timezone: e.target.value })}
+              title="Select your timezone"
               className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"
             >
-              {Intl.supportedValuesOf('timeZone').map((tz) => (
+              {['UTC', 'GMT', 'PST', 'CST', 'EST', 'MST'].map((tz) => (
                 <option key={tz} value={tz}>
                   {tz}
                 </option>

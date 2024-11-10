@@ -38,6 +38,7 @@ const TaskForm = ({ onClose, initialDate }: TaskFormProps) => {
           <button
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+            aria-label="Close"
           >
             <X size={20} />
           </button>
@@ -45,8 +46,9 @@ const TaskForm = ({ onClose, initialDate }: TaskFormProps) => {
 
         <form onSubmit={handleSubmit} className="p-4 space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Title</label>
+            <label htmlFor="title" className="block text-sm font-medium mb-1">Title</label>
             <input
+              id="title"
               type="text"
               required
               className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"
@@ -58,8 +60,9 @@ const TaskForm = ({ onClose, initialDate }: TaskFormProps) => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Description</label>
+            <label htmlFor="description" className="block text-sm font-medium mb-1">Description</label>
             <textarea
+              id="description"
               className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"
               value={formData.description}
               onChange={(e) =>
@@ -69,8 +72,9 @@ const TaskForm = ({ onClose, initialDate }: TaskFormProps) => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Status</label>
+            <label htmlFor="status" className="block text-sm font-medium mb-1">Status</label>
             <select
+              id="status"
               className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"
               value={formData.status}
               onChange={(e) =>
@@ -87,8 +91,9 @@ const TaskForm = ({ onClose, initialDate }: TaskFormProps) => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Deadline</label>
+            <label htmlFor="deadline" className="block text-sm font-medium mb-1">Deadline</label>
             <input
+              id="deadline"
               type="datetime-local"
               className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"
               value={formData.deadline}
@@ -99,8 +104,9 @@ const TaskForm = ({ onClose, initialDate }: TaskFormProps) => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Color</label>
+            <label htmlFor="color" className="block text-sm font-medium mb-1">Color</label>
             <input
+              id="color"
               type="color"
               className="w-full h-10"
               value={formData.color}
