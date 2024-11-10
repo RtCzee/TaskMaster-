@@ -1,0 +1,14 @@
+body.light {
+  background-color: white;
+  color: black;
+}
+
+body.dark {
+  background-color: #121212; /* Darkish blue can be replaced with a darker color */
+  color: white;
+}
+
+body.blackout {
+  background-color: black; /* Black for blackout mode */
+  color: white;
+} 

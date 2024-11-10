@@ -1,0 +1,35 @@
+.app-container {
+  text-align: center;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+button {
+  margin: 5px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+/* Light theme styles */
+body {
+  background-color: white;
+  color: black;
+}
+
+/* Dark theme styles */
+body.dark {
+  background-color: #121212; /* Darkish blue or dark gray */
+  color: white;
+}
+
+/* Blackout theme styles */
+body.blackout {
+  background-color: black; /* Black background */
+  color: white; /* White text */
+} 

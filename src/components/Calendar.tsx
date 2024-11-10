@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   startOfWeek,
   endOfWeek,
@@ -29,10 +29,10 @@ type CalendarView = 'day' | 'month' | 'year';
 const Calendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [view, setView] = useState<CalendarView>('month');
-  const [hoveredDate, setHoveredDate] = useState<Date | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const { tasks } = useTaskStore();
+  const [hoveredDate, setHoveredDate] = useState<Date | null>(null);
 
   const getTasksForDate = (date: Date) =>
     tasks.filter((task) => task.deadline && isSameDay(new Date(task.deadline), date));
@@ -260,6 +260,12 @@ const Calendar = () => {
         {view === 'month' && renderMonthView()}
         {view === 'year' && renderYearView()}
       </div>
+
+      {hoveredDate && (
+        <div className="text-sm text-gray-500">
+          Hovered Date: {format(hoveredDate, 'MMMM d, yyyy')}
+        </div>
+      )}
 
       {isFormOpen && (
         <TaskForm

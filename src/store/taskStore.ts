@@ -8,6 +8,7 @@ interface TaskStore {
   updateTask: (id: string, updates: Partial<Task>) => void;
   deleteTask: (id: string) => void;
   updateSettings: (settings: Partial<UserSettings>) => void;
+  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
 }
 
 export const useTaskStore = create<TaskStore>((set) => ({
@@ -42,4 +43,5 @@ export const useTaskStore = create<TaskStore>((set) => ({
     set((state) => ({
       settings: { ...state.settings, ...newSettings },
     })),
+  setTasks: set,
 }));

@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Plus, Calendar as CalendarIcon } from 'lucide-react';
 import { useTaskStore } from '../store/taskStore';
 import TaskForm from './TaskForm';
 import { format } from 'date-fns';
+import { supabase } from '../supabaseClient';
 
 const Dashboard = () => {
-  const { tasks } = useTaskStore();
+  const { tasks, setTasks } = useTaskStore();
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   const statusColors = {
@@ -13,6 +14,18 @@ const Dashboard = () => {
     'in-progress': 'bg-blue-100 text-blue-800',
     done: 'bg-green-100 text-green-800',
   };
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      const { data, error } = await supabase.from('tasks').select('*');
+      if (error) console.error('Error fetching tasks:', error);
+      else {
+        setTasks(data);
+      }
+    };
+
+    fetchTasks();
+  }, []);
 
   return (
     <div className="space-y-6">

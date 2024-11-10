@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import { useTaskStore } from '../store/taskStore';
 import { TaskStatus } from '../types/task';
+import { supabase } from '../supabaseClient';
 
 interface TaskFormProps {
   onClose: () => void;
@@ -18,16 +19,25 @@ const TaskForm = ({ onClose, initialDate }: TaskFormProps) => {
     color: '#6366f1',
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    addTask({
-      title: formData.title,
-      description: formData.description,
-      status: formData.status,
-      deadline: formData.deadline ? new Date(formData.deadline) : undefined,
-      color: formData.color,
-    });
-    onClose();
+    const { data, error } = await supabase
+      .from('tasks') // Make sure you have a 'tasks' table in Supabase
+      .insert([
+        {
+          title: formData.title,
+          description: formData.description,
+          status: formData.status,
+          deadline: formData.deadline ? new Date(formData.deadline) : null,
+          color: formData.color,
+        },
+      ]);
+    if (error) console.error('Error adding task:', error);
+    else {
+      console.log('Task added:', data);
+      addTask({ ...formData, deadline: new Date(formData.deadline) });
+      onClose();
+    }
   };
 
   return (
