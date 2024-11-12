@@ -3,10 +3,12 @@ import { Plus, Calendar as CalendarIcon } from 'lucide-react';
 import { useTaskStore } from '../store/taskStore';
 import TaskForm from './TaskForm';
 import { format } from 'date-fns';
-import { supabase } from '../supabaseClient';
+import { database } from '../services/database';
 
 const Dashboard = () => {
   const { tasks, setTasks } = useTaskStore();
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   const statusColors = {
@@ -17,15 +19,23 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchTasks = async () => {
-      const { data, error } = await supabase.from('tasks').select('*');
-      if (error) console.error('Error fetching tasks:', error);
-      else {
-        setTasks(data);
+      try {
+        setIsLoading(true);
+        const tasks = await database.tasks.getAll();
+        setTasks(tasks);
+      } catch (err) {
+        setError('Failed to fetch tasks');
+        console.error(err);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchTasks();
   }, []);
+
+  if (isLoading) return <div>Loading tasks...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="space-y-6">

@@ -1,4 +1,6 @@
 import { useTaskStore } from '../store/taskStore';
+import { database } from '../services/database';
+import { useState, useEffect } from 'react';
 
 // Update the UserSettings type to include the privacy property
 type UserSettings = {
@@ -14,6 +16,40 @@ type UserSettings = {
 
 const Settings = () => {
   const { settings, updateSettings } = useTaskStore();
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        setIsLoading(true);
+        const userSettings = await database.settings.get();
+        if (userSettings) {
+          updateSettings(userSettings);
+        }
+      } catch (err) {
+        setError('Failed to fetch settings');
+        console.error(err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchSettings();
+  }, []);
+
+  const handleSettingUpdate = async (newSettings: Partial<UserSettings>) => {
+    try {
+      await database.settings.upsert(newSettings);
+      updateSettings(newSettings);
+    } catch (err) {
+      console.error('Failed to update settings:', err);
+      // Add error handling UI here
+    }
+  };
+
+  if (isLoading) return <div>Loading settings...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="max-w-2xl mx-auto space-y-8">
@@ -29,7 +65,7 @@ const Settings = () => {
               value={settings.name || ''}
               title="Enter your name"
               placeholder="Your Name"
-              onChange={(e) => updateSettings({ name: e.target.value })}
+              onChange={(e) => handleSettingUpdate({ name: e.target.value })}
               className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"
             />
           </div>
@@ -38,7 +74,7 @@ const Settings = () => {
             <input
               type="url"
               value={settings.avatar || ''}
-              onChange={(e) => updateSettings({ avatar: e.target.value })}
+              onChange={(e) => handleSettingUpdate({ avatar: e.target.value })}
               className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"
               placeholder="https://example.com/avatar.jpg"
             />
@@ -51,7 +87,7 @@ const Settings = () => {
             <label className="block text-sm font-medium">Theme</label>
             <select
               value={settings.theme || 'light'}
-              onChange={(e) => updateSettings({ theme: e.target.value as 'light' | 'dark' | 'blackout' })}
+              onChange={(e) => handleSettingUpdate({ theme: e.target.value as 'light' | 'dark' | 'blackout' })}
               title="Select your theme"
               className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"
             >
@@ -68,7 +104,7 @@ const Settings = () => {
             <label className="block text-sm font-medium">Timezone</label>
             <select
               value={settings.timezone || ''}
-              onChange={(e) => updateSettings({ timezone: e.target.value })}
+              onChange={(e) => handleSettingUpdate({ timezone: e.target.value })}
               title="Select your timezone"
               className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"
             >
@@ -88,7 +124,7 @@ const Settings = () => {
             <input
               type="checkbox"
               checked={settings.notifications || false}
-              onChange={(e) => updateSettings({ notifications: e.target.checked })}
+              onChange={(e) => handleSettingUpdate({ notifications: e.target.checked })}
               className="h-4 w-4"
             />
           </div>
@@ -100,7 +136,7 @@ const Settings = () => {
             <label className="block text-sm font-medium">Language</label>
             <select
               value={settings.language || 'en'}
-              onChange={(e) => updateSettings({ language: e.target.value })}
+              onChange={(e) => handleSettingUpdate({ language: e.target.value })}
               className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"
             >
               <option value="en">English</option>
@@ -118,7 +154,7 @@ const Settings = () => {
             <label className="block text-sm font-medium">Profile Visibility</label>
             <select
               value={settings.privacy || 'public'}
-              onChange={(e) => updateSettings({ privacy: e.target.value })}
+              onChange={(e) => handleSettingUpdate({ privacy: e.target.value })}
               title="Select your profile visibility"
               className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"
             >
@@ -135,7 +171,7 @@ const Settings = () => {
             <input
               type="checkbox"
               checked={settings.backup || false}
-              onChange={(e) => updateSettings({ backup: e.target.checked })}
+              onChange={(e) => handleSettingUpdate({ backup: e.target.checked })}
               className="h-4 w-4"
             />
           </div>
